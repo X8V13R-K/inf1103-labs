@@ -25,7 +25,7 @@ print ("Day 3: ", followers)
 
 print ("=======================")
 username = input("Enter your username: ")
-age = input("Enter your age: ")
+age = int(input("Enter your age: "))
 category = input("Enter your content category: ")
 
 print ("\nInstagram Profile")
@@ -34,3 +34,5 @@ print ("Username: ", username)
 print ("Age: ", age)
 print ("Category: ", category)
 
+if age > 40 and category == "fun": 
+    print ("You are a old and fun creator!")
