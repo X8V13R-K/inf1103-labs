@@ -14,3 +14,14 @@ while True:
             #Inventory count exceeds 500
             print("Warning: Inventory exceeds 500 units.")
             break
+
+    elif qty.lower() == "quit":
+        #User quit
+        print("Units processed:", unitsProcessed)
+        print("Failed entries:", numFailedEntrys)
+        break
+
+    else:
+        #Invalid input 
+        numFailedEntrys += 1
+        print("Invalid input. Please enter a valid positive number.")
