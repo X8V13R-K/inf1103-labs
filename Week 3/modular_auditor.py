@@ -1,39 +1,45 @@
-inventory = 0
-deliveriesProcessed = 0
-numFailedEntrys = 0
-while True:
-    qty = input("Stock Quantity:")
+def get_valid_input(): 
+    deliveryAmt = 0
+    unitsProcessed = 0
+    numFailedEntrys = 0
 
-    if qty.isdigit(): 
-        #Valid input
-        inventory += int(qty)
-        deliveriesProcessed += 1
-        #print("Inventory:", inventory)
+    while True:
+        qty = input("Stock Quantity:")
 
-        if inventory > 500: 
-            #Inventory count exceeds 500
-            print("Warning: Inventory exceeds 500 units.")
+        if qty.isdigit(): 
+            #Valid input
+            qty = int(qty)
+            deliveryAmt = process_delivery(deliveryAmt, qty)
+
+            unitsProcessed += 1
+
+            print (deliveryAmt)
+
+            if deliveryAmt > 500: 
+                #Delivery amount exceeds 500
+                print("Warning: Delivery amount exceeds 500 units.")
+                break
+
+        elif qty.lower() == "quit":
+            #User quit
+            print("Deliveries processed:", unitsProcessed)
+            print("Failed entries:", numFailedEntrys)
             break
 
-    elif qty.lower() == "quit":
-        #User quit
-        print("Deliveries processed:", deliveriesProcessed)
-        print("Failed entries:", numFailedEntrys)
-        break
+        else:
+            #Invalid input 
+            numFailedEntrys += 1
+            print("Invalid input. Please enter a valid positive number.")
 
-    else:
-        #Invalid input 
-        numFailedEntrys += 1
-        print("Invalid input. Please enter a valid positive number.")
 
-def get_valid_input(): 
-    ...
-
-def process_delivery(current_total, new_value):
-    ...
+def process_delivery(deliveryAmt, qty):
+    deliveryAmt = deliveryAmt + qty
+    return deliveryAmt
 
 def calculate_tax(amount):
     ...
 
 def generate_report(total_units, failed_attempts):
     ...
+
+get_valid_input()
