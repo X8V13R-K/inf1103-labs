@@ -14,31 +14,34 @@ def save_inventory(inventory):
     ...
 
 def get_valid_input(): 
-    deliveryAmt = 0
-    numUnitsProcessed = 0
-    numFailedEntrys = 0
+    if inventory:
+        id = int((inventory[-1].split(",")[0]).strip()) + 1
+    else:
+        id = 1001
 
+    history = []
     while True:
-        amt = input("Stock Quantity:")
+        productName = input("Enter Product Name:").strip()
+        if productName.lower() == "quit":
+            print("Current Orders: ")
+            for orders in inventory:
+                print(orders.strip())
 
-        if amt.isdigit(): 
-            #Valid input
-            amt = int(amt)
-            deliveryAmt = process_delivery(deliveryAmt, amt)
-            print ("Tax for this delivery is: $" + str(calculate_tax(amt)))
-
-            numUnitsProcessed += 1
-
-        elif amt.lower() == "quit":
-            #User quit
-            generate_report(numUnitsProcessed, numFailedEntrys)
+            print("New Order Added: ")
+            for item in history:
+                print(item)
             break
+
+        productQuantity = input("Enter Quantity:").strip()
+        if productQuantity.isdigit():
+            #Valid input
+            productQuantity = int(productQuantity)
+            history.append(f"{id}, {productName}, {productQuantity}")
+            id += 1
 
         else:
             #Invalid input 
-            numFailedEntrys += 1
             print("Invalid input. Please enter a valid positive number.")
-
 
 def process_delivery(current_total, new_value):
     deliveryAmt = current_total + new_value
