@@ -1,6 +1,6 @@
 def load_inventory():
     try: 
-        file = open("inventory.txt", "r")
+        file = open("Week 4/inventory.txt", "r")
         inventory = file.readlines()
         file.close()
         return inventory
@@ -8,12 +8,17 @@ def load_inventory():
     except FileNotFoundError:
         file = open("Week 4/inventory.txt", "w")
         file.close()
-        return []
+        inventory = []
+        return inventory
 
-def save_inventory(inventory):
-    ...
+def save_inventory(history):
+    file = open("Week 4/inventory.txt", "a")
+    for item in history:
+        file.write(item + "\n")
+    file.close()
+    print("New orders saved to inventory.txt")
 
-def get_valid_input(): 
+def get_valid_input(inventory): 
     if inventory:
         id = int((inventory[-1].split(",")[0]).strip()) + 1
     else:
@@ -24,37 +29,29 @@ def get_valid_input():
         productName = input("Enter Product Name:").strip()
         if productName.lower() == "quit":
             print("Current Orders: ")
-            for orders in inventory:
-                print(orders.strip())
+            if inventory:
+                for item in inventory:
+                    print(item.strip())
+            else:
+                print("No orders in inventory.")
 
             print("New Order Added: ")
-            for item in history:
-                print(item)
+            if history:
+                for item in history:
+                    print(item.strip())
+                save_inventory(history)
+            else:
+                print("No new orders added.")
             break
 
         productQuantity = input("Enter Quantity:").strip()
-        if productQuantity.isdigit():
-            #Valid input
-            productQuantity = int(productQuantity)
-            history.append(f"{id}, {productName}, {productQuantity}")
-            id += 1
-
-        else:
-            #Invalid input 
+        while not productQuantity.isdigit() or int(productQuantity) <= 0:
             print("Invalid input. Please enter a valid positive number.")
+            productQuantity = input("Enter Quantity:").strip()
 
-def process_delivery(current_total, new_value):
-    deliveryAmt = current_total + new_value
-    return deliveryAmt
-
-def calculate_tax(amount):
-    tax_rate = 0.10  # 10% tax rate
-    tax_amount = amount * tax_rate
-    return tax_amount
-
-def generate_report(total_units, failed_attempts):
-    print("Total Deliveries Processed:", total_units)
-    print("Number of Failed / Rejected Entries:", failed_attempts)
+        productQuantity = int(productQuantity)
+        history.append(f"{id}, {productName}, {productQuantity}")
+        id += 1
 
 inventory = load_inventory()
-get_valid_input()
+get_valid_input(inventory)
