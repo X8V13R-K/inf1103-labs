@@ -63,7 +63,21 @@ def displayAllProducts():
     ...
 
 def addProduct():
-    ...
+    print ("Add New Product")
+    product_id = input("Product ID: ").strip()
+    product_name = input("Product Name: ").strip()
+    product_price = float(input("Price: ").strip())
+    product_quantity = int(input("Stock Quantity: ").strip())
+
+    # Adding product to inventory
+    inventory.append({
+        "id": product_id,
+        "name": product_name,
+        "price": product_price,
+        "quantity": product_quantity
+    })
+    saveInventory(inventory)
+    print("Product added successfully.")
 
 def updateStock():
     ...
@@ -72,7 +86,9 @@ def searchProduct():
     ...
 
 def saveInventory(inventory):
-    ...
+    with open(filepath, "w") as file:
+        json.dump(inventory, file)
+    print("Inventory saved successfully to inventory.json.")
 
 
 
