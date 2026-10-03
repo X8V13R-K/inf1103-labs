@@ -60,7 +60,13 @@ def displayMenu():
             print("Invalid option. Please enter a number between 1 and 6.")
 
 def displayAllProducts():
-    ...
+    if not inventory:
+        print("No products in inventory.")
+    else:
+        print("\nCurrent Inventory:")
+        for product in inventory:
+            print(f"ID: {product['id']}, Name: {product['name']}, Price: ${product['price']:.2f}, Quantity: {product['quantity']}")
+    print()
 
 def addProduct():
     print ("Add New Product")
@@ -80,10 +86,32 @@ def addProduct():
     print("Product added successfully.")
 
 def updateStock():
-    ...
+    print("Update Stock")
+    product_id = input("Enter Product ID to update: ").strip()
+    found_product = next((product for product in inventory if product["id"] == product_id), None)
+    
+    if found_product:
+        print("Product Found: ")
+        print(f"Name: {found_product['name']} \nQuantity: {found_product['quantity']}")
+        new_quantity = int(input(f"Enter new stock quantity for {found_product['name']}: ").strip())
+        found_product["quantity"] = new_quantity
+        saveInventory(inventory)
+        print(f"Stock updated successfully for {found_product['name']}.")
+    else:
+        print("Product not found.")
 
 def searchProduct():
-    ...
+    print("Search Product")
+    product_id = input("Enter Product ID to search: ").strip()
+    if product_id:
+        found_product = next((product for product in inventory if product["id"] == product_id), None)
+        if found_product:
+            print("Product Found: ")
+            print("-----------------------------")
+            print(f"ID: {found_product['id']} \nName: {found_product['name']} \nPrice: ${found_product['price']:.2f} \nQuantity: {found_product['quantity']}")
+            print("-----------------------------")
+        else:
+            print("Product not found.")
 
 def saveInventory(inventory):
     with open(filepath, "w") as file:
@@ -91,50 +119,6 @@ def saveInventory(inventory):
     print("Inventory saved successfully to inventory.json.")
 
 
-
-"""
-def save_inventory(history):
-    file = open("Week 5/inventory.json", "w")
-    json.dump(history, file)
-    file.close()
-    print("New orders saved to inventory.json")
-
-def get_valid_input(inventory): 
-    if inventory:
-        id = int((inventory[-1].split(",")[0]).strip()) + 1
-    else:
-        id = 1001
-
-    history = []
-    while True:
-        productName = input("Enter Product Name:").strip()
-        if productName.lower() == "quit":
-            print("Current Orders: ")
-            if inventory:
-                for item in inventory:
-                    print(item.strip())
-            else:
-                print("No orders in inventory.")
-
-            print("New Order Added: ")
-            if history:
-                for item in history:
-                    print(item.strip())
-                save_inventory(history)
-            else:
-                print("No new orders added.")
-            break
-
-        productQuantity = input("Enter Quantity:").strip()
-        while not productQuantity.isdigit() or int(productQuantity) <= 0:
-            print("Invalid input. Please enter a valid positive number.")
-            productQuantity = input("Enter Quantity:").strip()
-
-        productQuantity = int(productQuantity)
-        history.append(f"{id}, {productName}, {productQuantity}")
-        id += 1
-
-"""
 
 inventory = load_inventory()
 displayMenu()
