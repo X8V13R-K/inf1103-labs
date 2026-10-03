@@ -49,7 +49,7 @@ def displayMenu():
         elif choice == "4":
             searchProduct()
         elif choice == "5":
-            saveInventory()
+            saveInventory(inventory)
         elif choice == "6":
             print("Saving inventory and exiting the program.")
             saveInventory(inventory)
@@ -58,6 +58,23 @@ def displayMenu():
             break
         else:
             print("Invalid option. Please enter a number between 1 and 6.")
+
+def displayAllProducts():
+    ...
+
+def addProduct():
+    ...
+
+def updateStock():
+    ...
+
+def searchProduct():
+    ...
+
+def saveInventory(inventory):
+    ...
+
+
 
 """
 def save_inventory(history):
