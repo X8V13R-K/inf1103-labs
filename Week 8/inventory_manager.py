@@ -132,7 +132,7 @@ def main():
             print("Search Product")
             product_id = input("Enter product ID to search: ").strip()
 
-            inventory.search_product()
+            inventory.search_product(product_id)
             print()
 
         elif choice == "5":
