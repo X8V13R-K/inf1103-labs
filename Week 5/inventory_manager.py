@@ -1,7 +1,8 @@
 import json
 import os
 
-filepath = os.path.join(os.getcwd(), "Week 5", "inventory.json")
+DATA_DIR = os.environ.get("INVENTORY_DIR", os.path.join(os.getcwd(), "Week 5"))
+filepath = os.path.join(DATA_DIR, "inventory.json")
 
 print("=========================================================")
 print("INVENTORY MANAGEMENT SYSTEM")
