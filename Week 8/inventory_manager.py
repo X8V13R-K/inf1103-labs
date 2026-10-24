@@ -54,6 +54,7 @@ class Inventory:
         print(f"Stock updated successfully for {found_product.name}.")
 
     def search_product(self, product_id):
+        #receives product_id as parameter from user input
         for product in self.products: 
             if product.product_id == product_id: 
                 print("Product Found:") 
