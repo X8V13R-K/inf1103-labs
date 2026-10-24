@@ -47,30 +47,24 @@ class Inventory:
         self.products.append(product)
         self.save_inventory()
 
-    def update_product(self, product): 
-        print("Update Stock")
-        product_id = input("Enter Product ID to update: ").strip()
-        found_product = next((product for product in self.products if self.product_id == product_id), None)
+    def update_product(self, found_product, new_quantity): 
+        found_product.quantity = new_quantity 
+        self.save_inventory() 
         
-        if found_product:
-            print("Product Found: ")
-            print(f"Name: {found_product['name']} \nQuantity: {found_product['quantity']}")
-            new_quantity = int(input(f"Enter new stock quantity for {found_product['name']}: ").strip())
-            found_product["quantity"] = new_quantity
-            saveInventory(inventory)
-            print(f"Stock updated successfully for {found_product['name']}.")
-        else:
-            print("Product not found.")
+        print(f"Stock updated successfully for {found_product.name}.")
 
     def search_product(self, product_id):
-        print("Search Product")
-        product_id = input("Enter product ID to search: ").strip()
-        for product in self.products:
-            if product.product_id == product_id:
+        for product in self.products: 
+            if product.product_id == product_id: 
+                print("Product Found:") 
+                print(f"ID: {product.product_id}") 
+                print(f"Name: {product.name}") 
+                print(f"Price: {product.price}") 
+                print(f"Quantity: {product.quantity}") 
                 return product
-            
-            else: 
-                return "Product not found"
+
+        print("Product not found")
+        return None
 
     def save_inventory(self): 
         # Convert Product objects into dictionaries
@@ -122,10 +116,22 @@ def main():
             print("\nReturning to main menu...\n")
 
         elif choice == "3":
-            inventory.update_product()
-            print()
+            print("Update Stock")
+            product_id = input("Enter Product ID to update: ").strip()
+
+            # Search for product first
+            found_product = inventory.search_product(product_id)
+
+            #If product is found, carry on with updating
+            if found_product is not None: 
+                new_quantity = int( input( f"Enter new stock quantity for {found_product.name}: " ).strip() )
+                inventory.update_product(found_product, new_quantity)
+                print("\nReturning to main menu...\n")
 
         elif choice == "4":
+            print("Search Product")
+            product_id = input("Enter product ID to search: ").strip()
+
             inventory.search_product()
             print()
 
