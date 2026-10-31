@@ -7,6 +7,12 @@ class Product:
         self.name = name
         self.price = price
         self.quantity = quantity
+    
+    def display_information(self): 
+        print(f"ID: {self.product_id}")
+        print(f"Name: {self.name}")
+        print(f"Price: {self.price}")
+        print(f"Quantity: {self.quantity}")
 
 class PhysicalProduct(Product):
     def __init__(self, product_id, name, price, quantity, weight): 
@@ -14,7 +20,8 @@ class PhysicalProduct(Product):
         self.weight = weight
 
     def display_information(self):
-        print(f"ID: {self.product_id}, Name: {self.name}, Price: {self.price}, Quantity: {self.quantity}, Weight: {self.weight}")
+        super().display_information()
+        print(f"Weight: {self.weight}")
 
         
 class DigitalProduct(Product):
@@ -23,11 +30,15 @@ class DigitalProduct(Product):
         self.download_size = download_size
 
     def display_information(self):
-        print(f"ID: {self.product_id}, Name: {self.name}, Price: {self.price}, Quantity: {self.quantity}, Download size: {self.download_size}MB")
+        super().display_information()
+        print(f"Download size: {self.download_size}MB")
 
-product1 = DigitalProduct("P001", "Laptop", 1200.00, 15, 25000)
+product1 = PhysicalProduct("P001", "Laptop", 1200.00, 15, 25)
+product2 = DigitalProduct("P002", "VPN", 15.00, 12, 25000)
 
 product1.display_information()
+print()
+product2.display_information()
 
 class Inventory: 
     def __init__(self):
