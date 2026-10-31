@@ -16,7 +16,16 @@ class PhysicalProduct(Product):
     def display_information(self):
         print(f"ID: {self.product_id}, Name: {self.name}, Price: {self.price}, Quantity: {self.quantity}, Weight: {self.weight}")
 
-product1 = PhysicalProduct("P001", "Laptop", 1200.00, 15, 2.5)
+        
+class DigitalProduct(Product):
+    def __init__(self, product_id, name, price, quantity, download_size): 
+        super().__init__(product_id, name, price, quantity)
+        self.download_size = download_size
+
+    def display_information(self):
+        print(f"ID: {self.product_id}, Name: {self.name}, Price: {self.price}, Quantity: {self.quantity}, Download size: {self.download_size}MB")
+
+product1 = DigitalProduct("P001", "Laptop", 1200.00, 15, 25000)
 
 product1.display_information()
 
