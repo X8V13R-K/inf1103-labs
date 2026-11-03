@@ -19,8 +19,12 @@ class Product(ABC):
     def get_fulfillment_info(self, name):
         pass
 
+class CanBeShipped(ABC):
+    @abstractmethod
+    def calculate_shipping_cost(self, weight):
+        pass
 
-class PhysicalProduct(Product):
+class PhysicalProduct(Product, CanBeShipped):
     def __init__(self, product_id, name, price, quantity, weight): 
         super().__init__(product_id, name, price, quantity)
         self.weight = weight
@@ -29,9 +33,12 @@ class PhysicalProduct(Product):
         super().display_information()
         print(f"Weight: {self.weight}")
 
-    def get_fulfillment_info(self, name):
-        print(f"{name} is a Physical Product which requires physical shipping.")
+    def get_fulfillment_info(self):
+        print(f"{self.name} is a Physical Product which requires physical shipping.")
+        self.calculate_shipping_cost()
 
+    def calculate_shipping_cost(self):
+        print(f"Shipping cost for {self.name}: ${self.weight * 5:.2f}")
         
 class DigitalProduct(Product):
     def __init__(self, product_id, name, price, quantity, download_size): 
@@ -42,17 +49,17 @@ class DigitalProduct(Product):
         super().display_information()
         print(f"Download size: {self.download_size}MB")
 
-    def get_fulfillment_info(self, name):
-        print(f"{name} is a Digital Product which will be delivered digitally.")
+    def get_fulfillment_info(self):
+        print(f"{self.name} is a Digital Product which will be delivered digitally.")
 
 product1 = PhysicalProduct("P001", "Laptop", 1200.00, 15, 25)
 product2 = DigitalProduct("P002", "VPN", 15.00, 12, 25000)
 
 product1.display_information()
-product1.get_fulfillment_info(product1.name)
+product1.get_fulfillment_info()
 print()
 product2.display_information()
-product2.get_fulfillment_info(product2.name)
+product2.get_fulfillment_info()
 
 class Inventory: 
     def __init__(self):
