@@ -1,7 +1,8 @@
 import os
 import json
+from abc import ABC, abstractmethod
 
-class Product:
+class Product(ABC):
     def __init__(self, product_id, name, price, quantity):
         self.product_id = product_id
         self.name = name
@@ -14,6 +15,11 @@ class Product:
         print(f"Price: {self.price}")
         print(f"Quantity: {self.quantity}")
 
+    @abstractmethod
+    def get_fulfillment_info(self, name):
+        pass
+
+
 class PhysicalProduct(Product):
     def __init__(self, product_id, name, price, quantity, weight): 
         super().__init__(product_id, name, price, quantity)
@@ -22,6 +28,9 @@ class PhysicalProduct(Product):
     def display_information(self):
         super().display_information()
         print(f"Weight: {self.weight}")
+
+    def get_fulfillment_info(self, name):
+        print(f"{name} is a Physical Product which requires physical shipping.")
 
         
 class DigitalProduct(Product):
@@ -33,12 +42,17 @@ class DigitalProduct(Product):
         super().display_information()
         print(f"Download size: {self.download_size}MB")
 
+    def get_fulfillment_info(self, name):
+        print(f"{name} is a Digital Product which will be delivered digitally.")
+
 product1 = PhysicalProduct("P001", "Laptop", 1200.00, 15, 25)
 product2 = DigitalProduct("P002", "VPN", 15.00, 12, 25000)
 
 product1.display_information()
+product1.get_fulfillment_info(product1.name)
 print()
 product2.display_information()
+product2.get_fulfillment_info(product2.name)
 
 class Inventory: 
     def __init__(self):
