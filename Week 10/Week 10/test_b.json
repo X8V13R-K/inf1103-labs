@@ -1,0 +1,41 @@
+[
+  {
+    "product_id": "P001",
+    "name": "Laptop",
+    "price": 1299.0,
+    "type": "physical",
+    "quantity": 10,
+    "supplier": {
+      "supplier_id": "S001",
+      "name": "TechSupplies Pte Ltd",
+      "contact_email": "sales@techsupplies.sg"
+    },
+    "weight": 1.8
+  },
+  {
+    "product_id": "P001",
+    "name": "Laptop",
+    "price": 1299.0,
+    "type": "physical",
+    "quantity": 15,
+    "supplier": {
+      "supplier_id": "S001",
+      "name": "TechSupplies Pte Ltd",
+      "contact_email": "sales@techsupplies.sg"
+    },
+    "weight": 1.8
+  },
+  {
+    "product_id": "D001",
+    "name": "Python eBook",
+    "price": 29.9,
+    "type": "digital",
+    "quantity": 80,
+    "supplier": {
+      "supplier_id": "S001",
+      "name": "TechSupplies Pte Ltd",
+      "contact_email": "sales@techsupplies.sg"
+    },
+    "download_size": 5
+  }
+]

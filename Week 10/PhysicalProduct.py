@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from Product import Product
 from CanBeShipped import CanBeShipped
+from Supplier import Supplier
 
 class PhysicalProduct(Product, CanBeShipped):
     def __init__(self, product_id: str, name: str, price: float, type: str, quantity: int, supplier: Supplier, weight: float) -> None:
