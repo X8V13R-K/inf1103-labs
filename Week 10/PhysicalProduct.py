@@ -5,7 +5,7 @@ from CanBeShipped import CanBeShipped
 class PhysicalProduct(Product, CanBeShipped):
     def __init__(self, product_id: str, name: str, price: float, type: str, quantity: int, supplier: Supplier, weight: float) -> None:
         super().__init__(product_id, name, price, type, quantity, supplier)
-        self.__weight = weight
+        self.__weight: float = weight
 
     @property
     def weight(self) -> float:
