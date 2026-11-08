@@ -1,0 +1,10 @@
+2 (Association)
+Cannot. Deleting the supplier deletes all its information, product cannot display it anymore
+Can. Deleting supplier deletes the variable only, not the object. The product supplier is tagged to the supplier object, not the variable. The supplier object exists as long as an object is tagged to it. 
+
+3 (Aggregation)
+Cannot. Removing the product from Inventory A deletes it and it cannot be accessed anymore. 
+Can. Removing the product from Inventory A only removes it from the list. The product object still exists and can be used to add to Inventory B. 
+
+4 (Composition)
+2 OrderLine objects, 1 Product object. Each OrderLine object is created from the same Product object. 
