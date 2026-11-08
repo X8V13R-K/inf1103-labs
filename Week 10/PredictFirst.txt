@@ -8,3 +8,6 @@ Can. Removing the product from Inventory A only removes it from the list. The pr
 
 4 (Composition)
 2 OrderLine objects, 1 Product object. Each OrderLine object is created from the same Product object. 
+
+7 (Polymorphism)
+It will print the respective information. get_fulfilment_info -> runs physical and digital respective version automatically
