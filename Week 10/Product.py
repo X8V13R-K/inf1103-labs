@@ -45,3 +45,16 @@ class Product(ABC):
     @abstractmethod
     def get_fulfillment_info(self):
         pass
+
+    def to_dict(self) -> dict:
+        return {
+            "product_id": self.__product_id,
+            "name": self.__name,
+            "price": self.__price,
+            "type": self.__type,
+            "quantity": self.__quantity,
+            "supplier": self.__supplier.to_dict()  # Convert Supplier object to dictionary
+        }
+
+    def update_stock(self, new_quantity: int) -> None:
+        self.__quantity += new_quantity

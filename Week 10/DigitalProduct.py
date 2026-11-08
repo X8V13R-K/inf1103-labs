@@ -17,3 +17,8 @@ class DigitalProduct(Product):
 
     def get_fulfillment_info(self) -> str:
         return f"{self.name} is a Digital Product which will be delivered digitally."
+
+    def to_dict(self) -> dict:
+        product_dict = super().to_dict()
+        product_dict["download_size"] = self.__download_size
+        return product_dict

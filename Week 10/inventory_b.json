@@ -1,0 +1,15 @@
+[
+  {
+    "product_id": "P001",
+    "name": "Laptop",
+    "price": 1299.0,
+    "type": "physical",
+    "quantity": 10,
+    "supplier": {
+      "supplier_id": "S001",
+      "name": "TechSupplies Pte Ltd",
+      "contact_email": "sales@techsupplies.sg"
+    },
+    "weight": 1.8
+  }
+]

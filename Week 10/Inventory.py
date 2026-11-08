@@ -1,104 +1,89 @@
 import os
 import json
+from Product import Product
 from PhysicalProduct import PhysicalProduct
 from DigitalProduct import DigitalProduct
-from Product import Product
+from Supplier import Supplier
 
-class Inventory: 
-    def __init__(self):
-        DATA_DIR = os.environ.get("INVENTORY_DIR", os.path.join(os.getcwd(), "Week 9"))
-        self.filepath = os.path.join(DATA_DIR, "inventory.json")
 
-        # Load inventory.json if it exists, else return an empty list and create the file
+class Inventory:
+    def __init__(self, filename: str = "inventory.json") -> None:
+        data_dir = os.environ.get("INVENTORY_DIR", os.path.join(os.getcwd(), "Week 10"))
+        self.filepath: str = os.path.join(data_dir, filename)
+        self.products: list[Product] = []
+        self.load_inventory()
+
+    def load_inventory(self) -> None:
         try:
             with open(self.filepath, "r") as file:
-                # Convert dictionaries into Product objects 
                 inventory = json.load(file)
-                self.products = []
-                for item in inventory:
-                    if item["type"] == "physical":
-                        self.products.append(PhysicalProduct(
-                            product_id = item["product_id"],
-                            name = item["name"],
-                            price = item["price"],
-                            type = item["type"],
-                            quantity = item["quantity"],
-                            weight = item["weight"]
-                        ))
-                    elif item["type"] == "digital":
-                        self.products.append(DigitalProduct(
-                            product_id = item["product_id"],
-                            name = item["name"],
-                            price = item["price"],
-                            type = item["type"],
-                            quantity = item["quantity"],
-                            download_size = item["download_size"]
-                        ))
-            print("inventory.json found\nInventory loaded successfully.\n")
+
+            suppliers: dict[str, Supplier] = {}   # reuse ONE object per supplier
+            for item in inventory:
+                s = item["supplier"]
+                if s["supplier_id"] not in suppliers:
+                    suppliers[s["supplier_id"]] = Supplier(
+                        s["supplier_id"], s["name"], s["contact_email"])
+                supplier = suppliers[s["supplier_id"]]
+
+                if item["type"] == "physical":
+                    self.products.append(PhysicalProduct(
+                        product_id=item["product_id"], name=item["name"],
+                        price=item["price"], type=item["type"],
+                        quantity=item["quantity"], supplier=supplier,
+                        weight=item["weight"]))
+                elif item["type"] == "digital":
+                    self.products.append(DigitalProduct(
+                        product_id=item["product_id"], name=item["name"],
+                        price=item["price"], type=item["type"],
+                        quantity=item["quantity"], supplier=supplier,
+                        download_size=item["download_size"]))
+            print(f"{self.filepath} loaded successfully.\n")
 
         except FileNotFoundError:
             os.makedirs(os.path.dirname(self.filepath), exist_ok=True)
-            with open(self.filepath, "w") as file:
-                json.dump([], file)
-            print("inventory.json not found, created file.\n")
-            self.products = []
+            self.save_inventory()
+            print(f"{self.filepath} not found, created file.\n")
 
         except json.JSONDecodeError:
-            print("inventory.json is empty or corrupted. Starting with an empty inventory.\n")
-            with open(self.filepath, "w") as file:
-                json.dump([], file)
-            self.products = []
+            print("File is empty or corrupted. Starting with an empty inventory.\n")
+            self.save_inventory()
 
-    def display_all(self):
+    def display_all_products(self) -> None:
         if not self.products:
             print("No products in inventory.")
             return
-        else: 
-            print("Current Inventory:")
-            for product in self.products:
-                print("----------------------------")
-                product.display_information()
+        print("Current Inventory:")
+        for product in self.products:
+            print("----------------------------")
+            product.display_information()
+            print(product.get_fulfillment_info())
 
-    def add_product(self, product):
+    def add_product(self, product: Product) -> None:
         self.products.append(product)
         self.save_inventory()
 
-    def update_product(self, found_product, new_quantity): 
-        found_product.quantity = new_quantity 
-        self.save_inventory() 
-        
-        print(f"Stock updated successfully for {found_product.name}.")
+    def remove_product(self, product_id: str) -> None:
+        product = self.find_product(product_id)
+        if product is None:
+            print("Product not found.")
+            return
+        self.products.remove(product)    # removes the REFERENCE only
+        self.save_inventory()
+        print(f"{product.name} removed from inventory.")
 
-    def search_product(self, product_id):
-        #receives product_id as parameter from user input
-        for product in self.products: 
+    def find_product(self, product_id: str) -> Product | None:
+        for product in self.products:
             if product.product_id == product_id:
-                product.display_information()
                 return product
-            
-        print("Product not found")
         return None
 
-    def save_inventory(self): 
-        # Convert Product objects into dictionaries
-        inventory_data = []
-        for product in self.products:
-            product_data = {
-                "product_id": product.product_id,
-                "name": product.name,
-                "price": product.price,
-                "type": product.type,
-                "quantity": product.quantity
-            }
+    def update_product(self, product: Product, new_quantity: int) -> None:
+        product.update_stock(new_quantity - product.quantity)
+        self.save_inventory()
+        print(f"Stock updated successfully for {product.name}.")
 
-            if isinstance(product, PhysicalProduct):
-                product_data["weight"] = product.weight
-
-            elif isinstance(product, DigitalProduct):
-                product_data["download_size"] = product.download_size
-
-            inventory_data.append(product_data)
-        
+    def save_inventory(self) -> None:
+        inventory_data = [product.to_dict() for product in self.products]
         with open(self.filepath, "w") as file:
-            json.dump(inventory_data, file)
-        print("Inventory saved successfully to inventory.json.")
+            json.dump(inventory_data, file, indent=2)

@@ -20,3 +20,8 @@ class PhysicalProduct(Product, CanBeShipped):
 
     def calculate_shipping_cost(self) -> float:
         return self.weight * 5
+
+    def to_dict(self) -> dict:
+        product_dict = super().to_dict()
+        product_dict["weight"] = self.__weight
+        return product_dict
