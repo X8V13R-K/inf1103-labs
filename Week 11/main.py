@@ -1,9 +1,12 @@
 from Inventory import Inventory
-from PhysicalProduct import PhysicalProduct
-from DigitalProduct import DigitalProduct
+from Supplier import Supplier
+from ProductFactory import ProductFactory
 
-def main():
+
+def main() -> None:
     inventory = Inventory()
+    supplier = Supplier("S001", "TechSupplies Pte Ltd", "sales@techsupplies.sg")   # default supplier for new products
+
     while True:
         print("=========================================================")
         print("INVENTORY MANAGEMENT SYSTEM")
@@ -18,72 +21,72 @@ def main():
         print("----------------------------\n")
 
         choice = input("Enter option: ").strip()
+
         if choice == "1":
-            inventory.display_all()
+            inventory.display_all_products()
             print()
 
         elif choice == "2":
             print("Add new Product")
+            try:
+                product_id = input("Enter product ID: ").strip()
+                name = input("Enter product name: ").strip()
+                price = float(input("Enter product price: ").strip())
+                product_type = input("Enter product type (physical/digital): ").strip().lower()
+                quantity = int(input("Enter product quantity: ").strip())
 
-            product_id = input("Enter product ID: ").strip()
-            name = input("Enter product name: ").strip()
-            price = float(input("Enter product price: ").strip())
-            type = input("Enter product type (physical/digital): ").strip().lower()
-            quantity = int(input("Enter product quantity: ").strip())
+                weight = 0.0
+                download_size = 0
+                if product_type == "physical":
+                    weight = float(input("Enter product weight: ").strip())
+                elif product_type == "digital":
+                    download_size = int(input("Enter download size (MB): ").strip())
 
-            if type == "physical":
-                weight = float(input("Enter product weight: ").strip())
-                product = PhysicalProduct(product_id, name, price, type, quantity, weight)
+                product = ProductFactory.create(product_type, product_id, name, price,
+                                                quantity, supplier, weight, download_size)
+                inventory.add_product(product)
+                print("\nProduct added. Returning to main menu...\n")
 
-            elif type == "digital":
-                download_size = float(input("Enter product download size (in MB): ").strip())
-                product = DigitalProduct(product_id, name, price, type, quantity, download_size)
-
-            else:
-                print("Invalid product type. Please enter 'physical' or 'digital'.")
-                continue
-
-            inventory.add_product(product)
-            print("\nReturning to main menu...\n")
+            except ValueError as error:
+                print(f"Could not add product: {error}\n")
 
         elif choice == "3":
             print("Update Stock")
             product_id = input("Enter Product ID to update: ").strip()
+            found_product = inventory.find_product(product_id)
 
-            # Search for product first
-            found_product = inventory.search_product(product_id)
-
-            #If product is found, carry on with updating
-            if found_product is not None: 
-                new_quantity = int( input( f"Enter new stock quantity for {found_product.name}: " ).strip() )
+            if found_product is not None:
+                found_product.display_information()
+                new_quantity = int(input(f"Enter new stock quantity for {found_product.name}: ").strip())
                 inventory.update_product(found_product, new_quantity)
                 print("\nReturning to main menu...\n")
+            else:
+                print("Product not found.\n")
 
         elif choice == "4":
             print("Search Product")
             product_id = input("Enter product ID to search: ").strip()
+            found_product = inventory.find_product(product_id)
 
-            found_product = inventory.search_product(product_id)
-            if found_product:
-                found_product.get_fulfillment_info()
+            if found_product is not None:
+                found_product.display_information()
+                print(found_product.get_fulfillment_info())
             else:
                 print("Product not found.")
             print()
 
         elif choice == "5":
             inventory.save_inventory()
-            print()
+            print("Inventory saved.\n")
 
         elif choice == "6":
-            print("Saving inventory and exiting the program.")
             inventory.save_inventory()
-            print("Inventory saved successfully.")
-            print("Thank you for using the Inventory Management System. \nProgram terminated.")
+            print("Inventory saved. Program terminated.")
             break
 
         else:
-            print("Invalid option. Please enter a number between 1 and 6.")
-            print()
+            print("Invalid option. Please enter a number between 1 and 6.\n")
+
 
 if __name__ == "__main__":
     main()

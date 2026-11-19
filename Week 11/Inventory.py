@@ -1,9 +1,8 @@
 import os
 import json
 from Product import Product
-from PhysicalProduct import PhysicalProduct
-from DigitalProduct import DigitalProduct
 from Supplier import Supplier
+from ProductFactory import ProductFactory
 
 
 class Inventory:
@@ -26,18 +25,7 @@ class Inventory:
                         s["supplier_id"], s["name"], s["contact_email"])
                 supplier = suppliers[s["supplier_id"]]
 
-                if item["type"] == "physical":
-                    self.products.append(PhysicalProduct(
-                        product_id=item["product_id"], name=item["name"],
-                        price=item["price"], type=item["type"],
-                        quantity=item["quantity"], supplier=supplier,
-                        weight=item["weight"]))
-                elif item["type"] == "digital":
-                    self.products.append(DigitalProduct(
-                        product_id=item["product_id"], name=item["name"],
-                        price=item["price"], type=item["type"],
-                        quantity=item["quantity"], supplier=supplier,
-                        download_size=item["download_size"]))
+                self.products.append(ProductFactory.create(item["type"], item["product_id"], item["name"], item["price"], item["quantity"], supplier, weight=item.get("weight", 0.0), download_size=item.get("download_size", 0)))
             print(f"{self.filepath} loaded successfully.\n")
 
         except FileNotFoundError:
