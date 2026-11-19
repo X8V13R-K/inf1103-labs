@@ -5,6 +5,9 @@ class OrderLine:
         self.__product: Product = product
         self.__quantity: int = quantity
 
+        if quantity <= 0:
+            raise ValueError("Quantity must be greater than zero.")
+
     @property
     def product(self) -> Product:
         return self.__product

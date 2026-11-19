@@ -10,6 +10,11 @@ class Product(ABC):
         self.__quantity: int = quantity
         self.__supplier: Supplier = supplier
 
+        if price <= 0:
+            raise ValueError("Price must be greater than zero.")
+        if quantity < 0:
+            raise ValueError("Stock quantity cannot be negative.")
+
     @property
     def product_id(self) -> str:
         return self.__product_id
@@ -56,5 +61,7 @@ class Product(ABC):
             "supplier": self.__supplier.to_dict()  # Convert Supplier object to dictionary
         }
 
-    def update_stock(self, new_quantity: int) -> None:
-        self.__quantity += new_quantity
+    def update_stock(self, amount: int) -> None:
+        if self.__quantity + amount < 0:
+            raise ValueError("Stock quantity cannot be negative.")
+        self.__quantity += amount
