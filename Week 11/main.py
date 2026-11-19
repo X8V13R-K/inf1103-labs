@@ -1,7 +1,7 @@
 from Inventory import Inventory
 from Supplier import Supplier
 from ProductFactory import ProductFactory
-
+from  InputHelper import get_positive_float
 
 def main() -> None:
     inventory = Inventory()
@@ -31,7 +31,7 @@ def main() -> None:
             try:
                 product_id = input("Enter product ID: ").strip()
                 name = input("Enter product name: ").strip()
-                price = float(input("Enter product price: ").strip())
+                price = get_positive_float("Enter product price: $")
                 product_type = input("Enter product type (physical/digital): ").strip().lower()
                 quantity = int(input("Enter product quantity: ").strip())
 
