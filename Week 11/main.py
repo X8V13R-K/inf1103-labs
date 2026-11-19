@@ -1,7 +1,7 @@
 from Inventory import Inventory
 from Supplier import Supplier
 from ProductFactory import ProductFactory
-from  InputHelper import get_positive_float
+from input_helpers import get_positive_float
 
 def main() -> None:
     inventory = Inventory()
