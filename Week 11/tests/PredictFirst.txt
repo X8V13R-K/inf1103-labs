@@ -1,0 +1,83 @@
+2.1
+
+Before Strategy: Order.calculate_total() has to change (add another elif).
+This breaks the Open/Closed Principle.
+
+After Strategy: Order does not change. I only created a new StudentDiscount
+class and passed it in.
+
+
+2.3
+
+Prediction: BulkDiscount(200, 20) gives 230.
+
+After set_discount(PercentageDiscount(10)), it gives 225.
+
+What happened: 230, then 225.0. Matched.
+
+Why: Order just calls apply() on whichever strategy it holds.
+set_discount() swaps the strategy.
+
+
+2.4
+
+Prediction: Association. A discount is something the order uses, not part of
+the order. It is created outside, can be swapped, and two orders can share
+the same strategy object.
+
+Multiplicity: Order 0..* ---- 1 DiscountStrategy
+ 
+ 
+3.2
+
+Prediction: The line raise ValueError(f"Unknown product type: ...") in the
+factory raises the exception. Nothing catches it, so the program crashes
+with a traceback.
+
+What happened: Crashed with "ValueError: Unknown product type: service".
+Matched.
+ 
+ 
+3.3
+
+Prediction: Before the factory, 2 places change (main.py and
+Inventory.load_inventory()). After the factory, only 1 place changes
+(ProductFactory).
+
+Why it still breaks OCP: The factory's if/elif must still be edited for a
+new type.
+
+Why that is OK: The change is now in one place only, and a more complex
+design would be over-engineering for a small app.
+ 
+ 
+4
+
+Prediction: No. That would break LSP, because a child cannot weaken the
+parent's rules. Code using Product expects stock never to go negative.
+
+Result: Both subclasses inherit the rule from Product unchanged.
+ 
+ 
+5.1
+
+Prediction:
+abc   -> prints "Please enter a valid number, e.g. 12.50"
+-5    -> prints "Please enter a number greater than zero."
+12.50 -> returns 12.5
+
+What happened: True
+ 
+ 
+5.2
+
+Prediction: 3 products load (P001, D001, P003). Messages in order:
+1. Skipped row for "service" (unknown product type)
+2. Skipped row for "abc" (could not convert to float)
+3. "3 products loaded."
+4. "Load attempt finished."
+
+File renamed: except runs (file not found), else is skipped, and finally
+still runs.
+
+What happened: True
